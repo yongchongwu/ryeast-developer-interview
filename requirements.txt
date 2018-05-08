@@ -1,0 +1,77 @@
+ABC Department System
+=====================
+
+
+We are building a software which help ABC company to manage and trace all their departments, and all department are organized by tree-like structure.
+
+Currently, ABC have nine departments; each department has a name, a ID, and a budget, besides, a department have a parent department and any sub-department.
+Of course, the root department CEO office don't have parent. All those are organized by tree-like structure.
+
+                CEO office
+                    |
+    -------------------------------------
+    |        |      |       |           |
+Finance     HR     R&D   Support      Sales
+                    |
+            -------------------
+            |          |      |
+       Development    QA   Deploy
+
+Please note that the budget is very important for department, the lesser budge will get more bonus. If a department has sub-department, then its budget
+will be the total of sub-department budget.
+
+After discussing with ABC, Now we need to print all those departments structure to console. The best department( means has least budget)
+will be print first on the same level.For example, if the budget of Finance greater than the budget of HR, then it should be print as:
+
+                CEO office
+                    |
+    ----------------------------------
+    |        |      |       |        |
+Finance     HR     R&D   Support   Sales
+                    |
+            -------------------
+            |          |      |
+       Development    QA   Deploy
+
+We have given a class ABCDepartmentSystem which is the main entry of the system, you must output those format to console:
+
+CEO office  ----- Sales
+            |
+            ----- HR
+            |
+            ----- Support
+            |
+            ----- R&D ----- QA
+            |         |
+            |         ----- Deploy
+            |         |
+            |         ----- Development
+            |
+            ----- Finance
+
+Please refer to the javadoc of the main method for details.
+
+Besides, ABC told us they also need to show the department structure to web site or LED screen in future, so your design should consider this
+coming requirement.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
