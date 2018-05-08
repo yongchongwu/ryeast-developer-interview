@@ -2,6 +2,8 @@ package com.ryeast.departmentsystem;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -67,7 +69,13 @@ public class ABCDepartmentSystem {
     list.add(qa);
     list.add(deploy);
     list.add(development);
-    
+
+    //以Budget的值升序排序
+    Collections.sort(list, new Comparator<Department>() {
+      public int compare(Department o1, Department o2) {
+        return nvlBudget(o1.getBudget())-nvlBudget(o2.getBudget());
+      }
+    });
     //构建树形结构
     List<Department> tree = TreeUtil.makeTree(list);
     //重新计算Budget
@@ -87,16 +95,26 @@ public class ABCDepartmentSystem {
     assertCondition(development.getBudget() == 85);
 
     //Add your code here to completed the test.
-
+    //打印树形结构
+    printTree(tree);
 
   }
 
+  /**
+   * 重新计算Budget
+   * @param tree
+   */
   private static void makeBudget(List<Department> tree){
     for (Department department : tree) {
       sumBudget(department, department.getChildren());
     }
   }
 
+  /**
+   * 递归计算
+   * @param department
+   * @param children
+   */
   private static void sumBudget(Department department, List<Department> children) {
     for (Department child : children) {
       if (null!=child.getChildren()&&child.getChildren().size() > 0) {
@@ -106,10 +124,27 @@ public class ABCDepartmentSystem {
     }
   }
 
+  /**
+   * 值为空的时候返回0
+   * @param budget
+   * @return
+   */
   private static Integer nvlBudget(Integer budget){
     return (null==budget)?0:budget;
   }
 
+  /**
+   * 打印树形结构
+   * @param tree
+   */
+  public static void printTree(List<Department> tree) {
+    for (Department department : tree) {
+      System.out.println(department.getName());
+      if (null!=department.getChildren()&&department.getChildren().size() > 0) {
+        printTree(department.getChildren());
+      }
+    }
+  }
 
   private static void assertCondition(boolean condition) {
     if (!condition) {
