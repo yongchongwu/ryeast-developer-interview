@@ -14,7 +14,6 @@ import java.util.List;
  * output the tree structure to console.
  */
 public class ABCDepartmentSystem {
-
   /**
    * The main method should output this structure:
    *
@@ -56,8 +55,11 @@ public class ABCDepartmentSystem {
     rd = new Department(6, "R&D", 0, 1);
 
     qa = new Department(7, "QA", 10, 6);
-    deploy = new Department(8, "Deploy", 25, 6);
+    deploy = new Department(8, "Deploy", 0, 6);
     development = new Department(9, "Development", 85, 6);
+
+    Department deploy1 = new Department(10, "Deploy--1", 20, 8);
+    Department deploy2 = new Department(11, "Deploy--2", 5, 8);
 
     List<Department> list = new ArrayList<Department>();
     list.add(ceo);
@@ -70,16 +72,25 @@ public class ABCDepartmentSystem {
     list.add(deploy);
     list.add(development);
 
+    list.add(deploy1);
+    list.add(deploy2);
+
+    DepartmentService service = new DepartmentService();
+    //重新计算Budget
+    for (Department department : list) {
+      service.makeBudget(department, list);
+    }
+
     //以Budget的值升序排序
     Collections.sort(list, new Comparator<Department>() {
       public int compare(Department o1, Department o2) {
-        return nvlBudget(o1.getBudget())-nvlBudget(o2.getBudget());
+        return (null == o1.getBudget() ? 0 : o1.getBudget()) - (null == o2.getBudget() ? 0
+            : o2.getBudget());
       }
     });
+
     //构建树形结构
     List<Department> tree = TreeUtil.makeTree(list);
-    //重新计算Budget
-    makeBudget(tree);
 
     //Please ensure the the assert pass.
     assertCondition(ceo.getBudget() == 612);
@@ -95,55 +106,8 @@ public class ABCDepartmentSystem {
     assertCondition(development.getBudget() == 85);
 
     //Add your code here to completed the test.
-    //打印树形结构
-    printTree(tree);
+    TreeUtil.outputTree(tree);
 
-  }
-
-  /**
-   * 重新计算Budget
-   * @param tree
-   */
-  private static void makeBudget(List<Department> tree){
-    for (Department department : tree) {
-      sumBudget(department, department.getChildren());
-    }
-  }
-
-  /**
-   * 递归计算
-   * @param department
-   * @param children
-   */
-  private static void sumBudget(Department department, List<Department> children) {
-    for (Department child : children) {
-      if (null!=child.getChildren()&&child.getChildren().size() > 0) {
-        sumBudget(child, child.getChildren());
-      }
-      department.setBudget(nvlBudget(department.getBudget()) + nvlBudget(child.getBudget()));
-    }
-  }
-
-  /**
-   * 值为空的时候返回0
-   * @param budget
-   * @return
-   */
-  private static Integer nvlBudget(Integer budget){
-    return (null==budget)?0:budget;
-  }
-
-  /**
-   * 打印树形结构
-   * @param tree
-   */
-  public static void printTree(List<Department> tree) {
-    for (Department department : tree) {
-      System.out.println(department.getName());
-      if (null!=department.getChildren()&&department.getChildren().size() > 0) {
-        printTree(department.getChildren());
-      }
-    }
   }
 
   private static void assertCondition(boolean condition) {
@@ -152,6 +116,5 @@ public class ABCDepartmentSystem {
           "Seems your department budget is not correct, please fix it first.");
     }
   }
-
 
 }
